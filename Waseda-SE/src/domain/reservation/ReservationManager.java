@@ -79,10 +79,10 @@ public class ReservationManager {
 		return stayingDate;
 	}
 
-	public Date cancelReservation(String reservationNumber) throws ReservationException {
-		if (reservationNumber == null) {
-			throw new NullPointerException("reservationNumber");
-		}
+        public Date cancelReservation(String reservationNumber) throws ReservationException {
+                if (reservationNumber == null) {
+                        throw new NullPointerException("reservationNumber");
+                }
 
 		ReservationDao reservationDao = getReservationDao();
 		Reservation reservation = reservationDao.getReservation(reservationNumber);
@@ -106,11 +106,26 @@ public class ReservationManager {
 		// レコードを削除する代わりにステータスを更新する
 		reservation.setStatus(Reservation.RESERVATION_STATUS_CANCELED);
 		reservationDao.updateReservation(reservation);
-		return stayingDate;
-		// ▲▲▲ ここまで修正 ▲▲▲
-	}
+                return stayingDate;
+                // ▲▲▲ ここまで修正 ▲▲▲
+        }
 
-	private ReservationDao getReservationDao() {
-		return DaoFactory.getInstance().getReservationDao();
-	}
+        /**
+         * Retrieve reservation information without changing its state.
+         *
+         * @param reservationNumber reservation id
+         * @return Reservation entity or null if not found
+         */
+        public Reservation getReservation(String reservationNumber) throws ReservationException {
+                if (reservationNumber == null) {
+                        throw new NullPointerException("reservationNumber");
+                }
+
+                ReservationDao reservationDao = getReservationDao();
+                return reservationDao.getReservation(reservationNumber);
+        }
+
+        private ReservationDao getReservationDao() {
+                return DaoFactory.getInstance().getReservationDao();
+        }
 }
