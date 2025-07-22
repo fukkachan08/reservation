@@ -134,12 +134,11 @@ public class RoomSqlDao implements RoomDao {
 	 */
 	public void updateRoom(Room room) throws RoomException {
 		StringBuffer sql = new StringBuffer();
-		Statement statement = null;
-		Connection connection = null;
-		ResultSet resultSet = null;
-		try {
-			connection = getConnection();
-			statement = connection.createStatement();
+                Statement statement = null;
+                Connection connection = null;
+                try {
+                        connection = getConnection();
+                        statement = connection.createStatement();
 			sql.append("UPDATE ");
 			sql.append(TABLE_NAME);
 			sql.append(" SET stayingdate =");
@@ -153,18 +152,18 @@ public class RoomSqlDao implements RoomDao {
 				sql.append("'");
 			}
 			sql.append(" WHERE roomnumber='");
-			sql.append(room.getRoomNumber());
-			sql.append("';");
-			resultSet = statement.executeQuery(sql.toString());
-		}
-		catch (SQLException e) {
-			RoomException exception = new RoomException(RoomException.CODE_DB_EXEC_QUERY_ERROR, e);
-			exception.getDetailMessages().add("updateRoom()");
-			throw exception;
-		}
-		finally {
-			close(resultSet, statement, connection);
-		}
+                        sql.append(room.getRoomNumber());
+                        sql.append("';");
+                        statement.executeUpdate(sql.toString()); // executeUpdate を使用
+                }
+                catch (SQLException e) {
+                        RoomException exception = new RoomException(RoomException.CODE_DB_EXEC_QUERY_ERROR, e);
+                        exception.getDetailMessages().add("updateRoom()");
+                        throw exception;
+                }
+                finally {
+                        close(null, statement, connection); // ResultSet はないので null を渡す
+                }
 
 	}
 
