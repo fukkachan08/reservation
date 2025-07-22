@@ -37,7 +37,7 @@ public class ReservationSqlDao implements ReservationDao {
 		try {
 			connection = getConnection();
 			statement = connection.createStatement();
-			sql.append("SELECT reservationnumber, stayingdate, status FROM ");
+                       sql.append("SELECT reservationnumber, stayingdate, status, name, nights, roomtype, people FROM ");
 			sql.append(TABLE_NAME);
 			sql.append(" WHERE RESERVATIONNUMBER= '");
 			sql.append(reservationNumber);
@@ -46,9 +46,12 @@ public class ReservationSqlDao implements ReservationDao {
 			if (resultSet.next() == true) {
 				reservation = new Reservation();
 				reservation.setReservationNumber(reservationNumber);
-				reservation.setStatus(resultSet.getString("status"));
-				reservation.setStayingDate(DateUtil.convertToDate(resultSet
-						.getString("stayingDate")));
+                                reservation.setStatus(resultSet.getString("status"));
+                                reservation.setStayingDate(DateUtil.convertToDate(resultSet.getString("stayingDate")));
+                                reservation.setName(resultSet.getString("name"));
+                                reservation.setNights(resultSet.getInt("nights"));
+                                reservation.setRoomType(resultSet.getString("roomtype"));
+                                reservation.setPeople(resultSet.getInt("people"));
 			}
 		}
 		catch (SQLException e) {
@@ -105,15 +108,23 @@ public class ReservationSqlDao implements ReservationDao {
 			statement = connection.createStatement();
 			sql.append("INSERT INTO ");
 			sql.append(TABLE_NAME);
-			sql.append(" (reservationNumber, stayingDate, status) ");
+                       sql.append(" (reservationNumber, stayingDate, status, name, nights, roomType, people) ");
 			sql.append("values ('");
 			sql.append(reservation.getReservationNumber());
 			sql.append("', '");
 			sql.append(DateUtil.convertToString(reservation.getStayingDate()));
 			sql.append("', '");
-			sql.append(reservation.getStatus());
-			sql.append("');");
-			statement.executeUpdate(sql.toString()); // ここを executeUpdate に変更
+                       sql.append(reservation.getStatus());
+                       sql.append("', '");
+                       sql.append(reservation.getName());
+                       sql.append("', ");
+                       sql.append(reservation.getNights());
+                       sql.append(", '");
+                       sql.append(reservation.getRoomType());
+                       sql.append("', ");
+                       sql.append(reservation.getPeople());
+                       sql.append(");");
+                       statement.executeUpdate(sql.toString()); // ここを executeUpdate に変更
 		}
 		catch (SQLException e) {
 			ReservationException exception = new ReservationException(

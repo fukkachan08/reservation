@@ -18,18 +18,18 @@ import domain.room.RoomException;
  */
 public class ReserveRoomControl {
 
-	public String makeReservation(Date stayingDate) throws AppException {
+       public String makeReservation(Date stayingDate, String name, int nights, String roomType, int people) throws AppException {
 		//Permitting only one night so that change amount of availableQty is always -1
 		int availableQtyOfChange = -1;
 		try {
 			//Update number of available rooms
-			RoomManager roomManager = getRoomManager();
-			roomManager.updateRoomAvailableQty(stayingDate, availableQtyOfChange);
+                       RoomManager roomManager = getRoomManager();
+                       roomManager.updateRoomAvailableQty(stayingDate, availableQtyOfChange);
 
 			//Create reservation
-			ReservationManager reservationManager = getReservationManager();
-			String reservationNumber = reservationManager.createReservation(stayingDate);
-			return reservationNumber;
+                       ReservationManager reservationManager = getReservationManager();
+                       String reservationNumber = reservationManager.createReservation(stayingDate, name, nights, roomType, people);
+                       return reservationNumber;
 		}
 		catch (RoomException e) {
 			AppException exception = new AppException("Failed to reserve", e);

@@ -12,17 +12,21 @@ import java.util.Date;
  * */
 public class ReservationManager {
 	
-	public String createReservation(Date stayingDate) throws ReservationException,
-			NullPointerException {
-		if (stayingDate == null) {
-			throw new NullPointerException("stayingDate");
-		}
+       public String createReservation(Date stayingDate, String name, int nights, String roomType, int people)
+                       throws ReservationException, NullPointerException {
+               if (stayingDate == null) {
+                       throw new NullPointerException("stayingDate");
+               }
 
 		Reservation reservation = new Reservation();
 		String reservationNumber = generateReservationNumber();
-		reservation.setReservationNumber(reservationNumber);
-		reservation.setStayingDate(stayingDate);
-		reservation.setStatus(Reservation.RESERVATION_STATUS_CREATE);
+               reservation.setReservationNumber(reservationNumber);
+               reservation.setStayingDate(stayingDate);
+               reservation.setStatus(Reservation.RESERVATION_STATUS_CREATE);
+               reservation.setName(name);
+               reservation.setNights(nights);
+               reservation.setRoomType(roomType);
+               reservation.setPeople(people);
 
 		ReservationDao reservationDao = getReservationDao();
 		reservationDao.createReservation(reservation);

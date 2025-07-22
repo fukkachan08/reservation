@@ -15,23 +15,63 @@ public class ReserveRoomForm {
 
 	private ReserveRoomControl reserveRoomHandler = new ReserveRoomControl();
 
-	private Date stayingDate;
+       private Date stayingDate;
+
+       private String name;
+
+       private int nights;
+
+       private String roomType;
+
+       private int people;
 
 	private ReserveRoomControl getReserveRoomHandler() {
 		return reserveRoomHandler;
 	}
 
 	public String submitReservation() throws AppException {
-		ReserveRoomControl reserveRoomHandler = getReserveRoomHandler();
-		return reserveRoomHandler.makeReservation(stayingDate);
-	}
+               ReserveRoomControl reserveRoomHandler = getReserveRoomHandler();
+               return reserveRoomHandler.makeReservation(stayingDate, name, nights, roomType, people);
+       }
 
 	public Date getStayingDate() {
 		return stayingDate;
 	}
 
-	public void setStayingDate(Date stayingDate) {
-		this.stayingDate = stayingDate;
-	}
+       public void setStayingDate(Date stayingDate) {
+               this.stayingDate = stayingDate;
+       }
+
+       public String getName() {
+               return name;
+       }
+
+       public void setName(String name) {
+               this.name = name;
+       }
+
+       public int getNights() {
+               return nights;
+       }
+
+       public void setNights(int nights) {
+               this.nights = nights;
+       }
+
+       public String getRoomType() {
+               return roomType;
+       }
+
+       public void setRoomType(String roomType) {
+               this.roomType = roomType;
+       }
+
+       public int getPeople() {
+               return people;
+       }
+
+       public void setPeople(int people) {
+               this.people = people;
+       }
 
 }
