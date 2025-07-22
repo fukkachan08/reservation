@@ -4,6 +4,9 @@
 package domain.payment;
 
 import domain.DaoFactory;
+import domain.room.Room;
+import domain.room.RoomDao;
+import domain.room.RoomException;
 import java.util.Date;
 import util.DateUtil;
 
@@ -31,24 +34,36 @@ public class PaymentManager {
 		Payment payment = new Payment();
 		payment.setStayingDate(stayingDate);
 		payment.setRoomNumber(roomNumber);
-		payment.setAmount(getRatePerDay(roomNumber));
+                payment.setAmount(getRatePerDay(roomNumber));
 		payment.setStatus(Payment.PAYMENT_STATUS_CREATE);
 
 		PaymentDao paymentDao = getPaymentDao();
 		paymentDao.createPayment(payment);
 	}
 
-	private int getRatePerDay(String roomNumber) {
-		//部屋番号でランクを判別し料金を返す
-		if (roomNumber.equals("1001") || roomNumber.equals("1002") || roomNumber.equals("1003")) {
-			return RATE_TWIN;
-		} else if (roomNumber.equals("1004")) {
-			return RATE_DOUBLE;
-		} else if (roomNumber.equals("1005")) {
-			return RATE_SUITE;
-		}
-		return 0; //該当なし
-	}
+        private int getRatePerDay(String roomNumber) throws PaymentException {
+                try {
+                        RoomDao roomDao = DaoFactory.getInstance().getRoomDao();
+                        Room room = roomDao.getRoom(roomNumber);
+                        if (room == null) {
+                                return 0;
+                        }
+                        return getRatePerType(room.getRoomType());
+                } catch (RoomException e) {
+                        throw new PaymentException(PaymentException.CODE_DB_EXEC_QUERY_ERROR, e);
+                }
+        }
+
+        private int getRatePerType(String roomType) {
+                if ("Twin".equalsIgnoreCase(roomType)) {
+                        return RATE_TWIN;
+                } else if ("Double".equalsIgnoreCase(roomType)) {
+                        return RATE_DOUBLE;
+                } else if ("Suite".equalsIgnoreCase(roomType)) {
+                        return RATE_SUITE;
+                }
+                return 0;
+        }
 
 	public void consumePayment(Date stayingDate, String roomNumber) throws PaymentException,
 			NullPointerException {

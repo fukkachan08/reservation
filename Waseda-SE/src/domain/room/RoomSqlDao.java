@@ -41,7 +41,7 @@ public class RoomSqlDao implements RoomDao {
 		try {
 			connection = getConnection();
 			statement = connection.createStatement();
-			sql.append("SELECT roomnumber FROM ");
+                        sql.append("SELECT roomnumber, roomtype FROM ");
 			sql.append(TABLE_NAME);
 			sql.append(";");
 			resultSet = statement.executeQuery(sql.toString());
@@ -72,7 +72,7 @@ public class RoomSqlDao implements RoomDao {
 		try {
 			connection = getConnection();
 			statement = connection.createStatement();
-			sql.append("SELECT roomnumber, stayingdate FROM ");
+                        sql.append("SELECT roomnumber, stayingdate, roomtype FROM ");
 			sql.append(TABLE_NAME);
 			sql.append(" WHERE ROOMNUMBER='");
 			sql.append(roomNumber);
@@ -82,7 +82,8 @@ public class RoomSqlDao implements RoomDao {
 			if (resultSet.next() == true) {
 				room = new Room();
 				room.setRoomNumber(roomNumber);
-				room.setStayingDate(DateUtil.convertToDate(resultSet.getString("stayingDate")));
+                                room.setStayingDate(DateUtil.convertToDate(resultSet.getString("stayingDate")));
+                                room.setRoomType(resultSet.getString("roomtype"));
 			}
 		}
 		catch (SQLException e) {
@@ -113,9 +114,10 @@ public class RoomSqlDao implements RoomDao {
 			sql.append(" WHERE stayingdate='';");
 			resultSet = statement.executeQuery(sql.toString());
 			while (resultSet.next()) {
-				Room room = new Room();
-				room.setRoomNumber(resultSet.getString("roomnumber"));
-				emptyRoomList.add(room);
+                                Room room = new Room();
+                                room.setRoomNumber(resultSet.getString("roomnumber"));
+                                room.setRoomType(resultSet.getString("roomtype"));
+                                emptyRoomList.add(room);
 			}
 		}
 		catch (SQLException e) {
@@ -142,7 +144,7 @@ public class RoomSqlDao implements RoomDao {
 			statement = connection.createStatement();
 			sql.append("UPDATE ");
 			sql.append(TABLE_NAME);
-			sql.append(" SET stayingdate =");
+                        sql.append(" SET stayingdate =");
 			//Room status and staying date share the same portion on DB table
 			if (room.getStayingDate() == null) {
 				sql.append("''");
@@ -152,9 +154,11 @@ public class RoomSqlDao implements RoomDao {
 				sql.append(DateUtil.convertToString(room.getStayingDate()));
 				sql.append("'");
 			}
-			sql.append(" WHERE roomnumber='");
-			sql.append(room.getRoomNumber());
-			sql.append("';");
+                        sql.append(", roomtype = '");
+                        sql.append(room.getRoomType());
+                        sql.append("' WHERE roomnumber='");
+                        sql.append(room.getRoomNumber());
+                        sql.append("';");
 			resultSet = statement.executeQuery(sql.toString());
 		}
 		catch (SQLException e) {
