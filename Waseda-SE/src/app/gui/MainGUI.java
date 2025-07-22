@@ -18,7 +18,8 @@ public class MainGUI {
             tabbedPane.addTab("チェックイン", new CheckInPanel());
             tabbedPane.addTab("チェックアウト", new CheckOutPanel());
             tabbedPane.addTab("予約キャンセル", new CancellationPanel()); // この行を追加
-            tabbedPane.addTab("空き部屋一覧", new EmptyRoomPanel()); 
+            tabbedPane.addTab("空き部屋一覧", new EmptyRoomPanel());
+            tabbedPane.addTab("予約照会", new ReservationLookupPanel());
 
             // ▲▲▲ ここまで修正 ▲▲▲
 
