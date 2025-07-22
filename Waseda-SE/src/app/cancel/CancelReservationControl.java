@@ -23,15 +23,15 @@ public class CancelReservationControl {
 	 * @param reservationNumber 予約番号
 	 * @throws AppException アプリケーション例外
 	 */
-	public void cancelReservation(String reservationNumber) throws AppException {
+       public void cancelReservation(String reservationNumber, String roomType) throws AppException {
 		try {
 			// 1. 予約を検索し、存在すれば宿泊日を取得する
 			ReservationManager reservationManager = getReservationManager();
 			Date stayingDate = reservationManager.cancelReservation(reservationNumber);
 
 			// 2. 空室在庫を増やす
-			RoomManager roomManager = getRoomManager();
-			roomManager.updateRoomAvailableQty(stayingDate, 1); // 在庫を1つ増やす
+                       RoomManager roomManager = getRoomManager();
+                       roomManager.updateRoomAvailableQty(stayingDate, roomType, 1); // 在庫を1つ増やす
 
 		} catch (ReservationException e) {
 			AppException exception = new AppException("予約のキャンセルに失敗しました。", e);

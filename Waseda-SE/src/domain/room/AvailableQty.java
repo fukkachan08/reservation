@@ -16,7 +16,9 @@ public class AvailableQty {
 	 */
 	public static final int AVAILABLE_ALL = -1;
 
-	private Date date;
+        private Date date;
+
+        private String roomType;
 
 	/**
 	 * number of available rooms
@@ -31,12 +33,20 @@ public class AvailableQty {
 		this.date = date;
 	}
 
-	public int getQty() {
-		return qty;
-	}
+        public int getQty() {
+                return qty;
+        }
 
-	public void setQty(int qty) {
-		this.qty = qty;
-	}
+        public void setQty(int qty) {
+                this.qty = qty;
+        }
+
+        public String getRoomType() {
+                return roomType;
+        }
+
+        public void setRoomType(String roomType) {
+                this.roomType = roomType;
+        }
 
 }

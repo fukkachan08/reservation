@@ -11,41 +11,46 @@ import util.DateUtil;
  * */
 public class RoomManager {
 	
-	public void updateRoomAvailableQty(Date stayingDate, int qtyOfChange) throws RoomException,
-			NullPointerException {
-		if (stayingDate == null) {
-			throw new NullPointerException("stayingDate");
-		}
-		if (qtyOfChange == 0) {
-			return;
-		}
+       public void updateRoomAvailableQty(Date stayingDate, String roomType, int qtyOfChange) throws RoomException,
+                        NullPointerException {
+               if (stayingDate == null) {
+                       throw new NullPointerException("stayingDate");
+               }
+               if (roomType == null) {
+                       throw new NullPointerException("roomType");
+               }
+               if (qtyOfChange == 0) {
+                       return;
+               }
 
-		AvailableQtyDao availableQtyDao = getAvailableQtyDao();
-		AvailableQty availableQty = availableQtyDao.getAvailableQty(stayingDate);
-		//Create new AvailableQty if corresponding AvailableQty on stayingDate does not exist
-		if (availableQty == null) {
-			availableQty = new AvailableQty();
-			availableQty.setQty(AvailableQty.AVAILABLE_ALL);
-			availableQty.setDate(stayingDate);
-		}
+               AvailableQtyDao availableQtyDao = getAvailableQtyDao();
+               AvailableQty availableQty = availableQtyDao.getAvailableQty(stayingDate, roomType);
+               //Create new AvailableQty if corresponding AvailableQty on stayingDate does not exist
+               if (availableQty == null) {
+                       availableQty = new AvailableQty();
+                       availableQty.setQty(AvailableQty.AVAILABLE_ALL);
+                       availableQty.setDate(stayingDate);
+                       availableQty.setRoomType(roomType);
+               }
 
 		// Obtain maximum number of available rooms
-		int maxAvailableQty = getMaxAvailableQty();
+               int maxAvailableQty = getMaxAvailableQty(roomType);
 		if (availableQty.getQty() == AvailableQty.AVAILABLE_ALL) {
 			// If all rooms are available,  
 			// set then maximum number obtained to number of available rooms 
 			availableQty.setQty(maxAvailableQty);
 
 			// Newly register availableQty data on stayingDate to DB
-			availableQtyDao.createAbailableQty(availableQty);
-		}
+                       availableQtyDao.createAbailableQty(availableQty);
+               }
 
 		int changedAvailableQty = availableQty.getQty() + qtyOfChange;
 		if (changedAvailableQty >= 0 && changedAvailableQty <= maxAvailableQty) {
 			// If it is possible to update
 			availableQty.setQty(changedAvailableQty);
 			availableQty.setDate(stayingDate);
-			availableQtyDao.updateAvailableQty(availableQty);
+                       availableQty.setRoomType(roomType);
+                       availableQtyDao.updateAvailableQty(availableQty);
 		}
 		else {
 			// If it is impossible to update
@@ -57,11 +62,16 @@ public class RoomManager {
 		}
 	}
 
-	private int getMaxAvailableQty() throws RoomException {
-		RoomDao roomDao = getRoomDao();
-		List rooms = roomDao.getRooms();
-		return rooms.size();
-	}
+       private int getMaxAvailableQty(String roomType) throws RoomException {
+               if ("twin".equalsIgnoreCase(roomType)) {
+                       return 3;
+               } else if ("double".equalsIgnoreCase(roomType)) {
+                       return 1;
+               } else if ("suite".equalsIgnoreCase(roomType)) {
+                       return 1;
+               }
+               return 0;
+       }
 
 	public String assignCustomer(Date stayingDate) throws RoomException, NullPointerException {
 		if (stayingDate == null) {
