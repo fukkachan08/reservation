@@ -73,24 +73,34 @@ public class RoomManager {
                return 0;
        }
 
-	public String assignCustomer(Date stayingDate) throws RoomException, NullPointerException {
-		if (stayingDate == null) {
-			throw new NullPointerException("stayingDate");
-		}
-		RoomDao roomDao = getRoomDao();
-		// Obtain all of empty available rooms
-		List emptyRooms = roomDao.getEmptyRooms();
-		// If there is no empty available rooms
-		if (emptyRooms.size() == 0) {
-			RoomException exception = new RoomException(RoomException.CODE_EMPTYROOM_NOT_FOUND);
-			throw exception;
-		}
-		Room room = (Room) emptyRooms.get(0);
-		String roomNumber = room.getRoomNumber();
-		room.setStayingDate(stayingDate);
-		roomDao.updateRoom(room);
-		return roomNumber;
-	}
+        public String assignCustomer(Date stayingDate) throws RoomException, NullPointerException {
+                return assignCustomer(stayingDate, null);
+        }
+
+        public String assignCustomer(Date stayingDate, String roomType) throws RoomException, NullPointerException {
+                if (stayingDate == null) {
+                        throw new NullPointerException("stayingDate");
+                }
+                RoomDao roomDao = getRoomDao();
+                // Obtain all of empty available rooms
+                List emptyRooms = roomDao.getEmptyRooms();
+                // If there is no empty available rooms
+                if (emptyRooms.size() == 0) {
+                        RoomException exception = new RoomException(RoomException.CODE_EMPTYROOM_NOT_FOUND);
+                        throw exception;
+                }
+                for (int i = 0; i < emptyRooms.size(); i++) {
+                        Room room = (Room) emptyRooms.get(i);
+                        if (roomType == null || roomType.equalsIgnoreCase(room.getRoomType())) {
+                                String roomNumber = room.getRoomNumber();
+                                room.setStayingDate(stayingDate);
+                                roomDao.updateRoom(room);
+                                return roomNumber;
+                        }
+                }
+                RoomException exception = new RoomException(RoomException.CODE_EMPTYROOM_NOT_FOUND);
+                throw exception;
+        }
 
 	public Date removeCustomer(String roomNumber) throws RoomException, NullPointerException {
 		if (roomNumber == null) {
