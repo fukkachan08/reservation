@@ -83,7 +83,7 @@ public class ReservationSqlDao implements ReservationDao {
 			sql.append("' where reservationNumber='");
 			sql.append(reservation.getReservationNumber());
 			sql.append("';");
-			statement.executeUpdate(sql.toString()); // ここを executeUpdate に変更
+                        statement.executeUpdate(sql.toString());
 		}
 		catch (SQLException e) {
 			ReservationException exception = new ReservationException(
@@ -92,7 +92,7 @@ public class ReservationSqlDao implements ReservationDao {
 			throw exception;
 		}
 		finally {
-			close(null, statement, connection); // ResultSet はないので null を渡す
+                        close(null, statement, connection);
 		}
 	}
 
@@ -124,7 +124,7 @@ public class ReservationSqlDao implements ReservationDao {
                        sql.append("', ");
                        sql.append(reservation.getPeople());
                        sql.append(");");
-                       statement.executeUpdate(sql.toString()); // ここを executeUpdate に変更
+                       statement.executeUpdate(sql.toString());
 		}
 		catch (SQLException e) {
 			ReservationException exception = new ReservationException(
@@ -133,7 +133,7 @@ public class ReservationSqlDao implements ReservationDao {
 			throw exception;
 		}
 		finally {
-			close(null, statement, connection); // ResultSet はないので null を渡す
+                        close(null, statement, connection);
 		}
 	}
 

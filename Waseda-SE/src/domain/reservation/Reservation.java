@@ -14,7 +14,7 @@ public class Reservation {
 
 	public static final String RESERVATION_STATUS_CONSUME = "consume";
 
-	public static final String RESERVATION_STATUS_CANCELED = "canceled"; // この行を追加
+        public static final String RESERVATION_STATUS_CANCELED = "canceled";
 
 	private String reservationNumber;
 

@@ -23,7 +23,7 @@ public class ReservationException extends Exception {
 
 	public static final int CODE_DB_CLOSE_ERROR = 5;
 
-	public static final int CODE_RESERVATION_ALREADY_CANCELED = 6; // この行を追加
+        public static final int CODE_RESERVATION_ALREADY_CANCELED = 6;
 
 	private static final String MESSAGE_RESERVATION_NOT_FOUND = "Reservation not found";
 
@@ -35,7 +35,7 @@ public class ReservationException extends Exception {
 
 	private static final String MESSAGE_DB_CLOSE_ERROR = "DB close error";
 	
-	private static final String MESSAGE_RESERVATION_ALREADY_CANCELED = "Reservation already canceled"; // この行を追加
+        private static final String MESSAGE_RESERVATION_ALREADY_CANCELED = "Reservation already canceled";
 
 	private int code;
 

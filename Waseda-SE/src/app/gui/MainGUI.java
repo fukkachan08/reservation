@@ -13,14 +13,12 @@ public class MainGUI {
 
             JTabbedPane tabbedPane = new JTabbedPane();
 
-            // ▼▼▼ ここを修正 ▼▼▼
             tabbedPane.addTab("予約", new ReservationPanel());
             tabbedPane.addTab("チェックイン", new CheckInPanel());
             tabbedPane.addTab("チェックアウト", new CheckOutPanel());
-            tabbedPane.addTab("予約キャンセル", new CancellationPanel()); // この行を追加
-            tabbedPane.addTab("空き部屋一覧", new EmptyRoomPanel()); 
+            tabbedPane.addTab("予約キャンセル", new CancellationPanel());
+            tabbedPane.addTab("空き部屋一覧", new EmptyRoomPanel());
 
-            // ▲▲▲ ここまで修正 ▲▲▲
 
             frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
             frame.setVisible(true);

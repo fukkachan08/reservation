@@ -59,15 +59,14 @@ public class ReservationManager {
 			throw exception;
 		}
 
-		// ▼▼▼ ここから修正 ▼▼▼
-		//If reservation has been canceled already
+                //If reservation has been canceled already
 		if (reservation.getStatus().equals(Reservation.RESERVATION_STATUS_CANCELED)) {
 			ReservationException exception = new ReservationException(
 					ReservationException.CODE_RESERVATION_ALREADY_CANCELED);
 			exception.getDetailMessages().add("reservation_number[" + reservationNumber + "]");
 			throw exception;
 		}
-		// ▲▲▲ ここまで修正 ▲▲▲
+
 
 		//If reservation has been consumed already
 		if (reservation.getStatus().equals(Reservation.RESERVATION_STATUS_CONSUME)) {
@@ -105,13 +104,12 @@ public class ReservationManager {
 			throw exception;
 		}
 
-		// ▼▼▼ ここから修正 ▼▼▼
-		Date stayingDate = reservation.getStayingDate();
-		// レコードを削除する代わりにステータスを更新する
-		reservation.setStatus(Reservation.RESERVATION_STATUS_CANCELED);
-		reservationDao.updateReservation(reservation);
-		return stayingDate;
-		// ▲▲▲ ここまで修正 ▲▲▲
+                Date stayingDate = reservation.getStayingDate();
+                // Update the status instead of deleting the record
+                reservation.setStatus(Reservation.RESERVATION_STATUS_CANCELED);
+                reservationDao.updateReservation(reservation);
+                return stayingDate;
+
 	}
 
 	private ReservationDao getReservationDao() {
