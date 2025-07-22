@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public interface AvailableQtyDao {
 
-	public AvailableQty getAvailableQty(Date date) throws RoomException;
+       public AvailableQty getAvailableQty(Date date, String roomType) throws RoomException;
 
 	public void updateAvailableQty(AvailableQty availableQty) throws RoomException;
 

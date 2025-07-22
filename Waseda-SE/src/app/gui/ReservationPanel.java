@@ -67,9 +67,10 @@ public class ReservationPanel extends JPanel {
                 int selectedIndex = roomTypeComboBox.getSelectedIndex();
                 int price;
                 int maxCapacity;
-                if (selectedIndex == 0) { price = 10000; maxCapacity = 2;
-                } else if (selectedIndex == 1) { price = 15000; maxCapacity = 2;
-                } else { price = 30000; maxCapacity = 4; }
+                String type;
+                if (selectedIndex == 0) { price = 10000; maxCapacity = 2; type = "twin";
+                } else if (selectedIndex == 1) { price = 15000; maxCapacity = 2; type = "double";
+                } else { price = 30000; maxCapacity = 4; type = "suite"; }
 
                 // 人数の検証
                 String peopleStr = peopleField.getText();
@@ -103,6 +104,7 @@ public class ReservationPanel extends JPanel {
                 // 予約処理の呼び出し
                 ReserveRoomForm form = new ReserveRoomForm();
                 form.setStayingDate(stayingDate);
+                form.setRoomType(type);
                 String reservationNumber = form.submitReservation();
 
                 // ▼▼▼ 完了メッセージに宿泊数と合計金額を追加 ▼▼▼

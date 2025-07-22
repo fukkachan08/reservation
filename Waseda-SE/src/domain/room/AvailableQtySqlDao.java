@@ -31,7 +31,7 @@ public class AvailableQtySqlDao implements AvailableQtyDao {
 	/**
 	 * @see domain.room.AvailableQtyDao#getAvailableQty(java.util.Date)
 	 */
-	public AvailableQty getAvailableQty(Date date) throws RoomException {
+       public AvailableQty getAvailableQty(Date date, String roomType) throws RoomException {
 		StringBuffer sql = new StringBuffer();
 		Statement statement = null;
 		ResultSet resultSet = null;
@@ -40,17 +40,20 @@ public class AvailableQtySqlDao implements AvailableQtyDao {
 		try {
 			connection = getConnection();
 			statement = connection.createStatement();
-			sql.append("SELECT QTY FROM ");
-			sql.append(TABLE_NAME);
-			sql.append(" WHERE DATE='");
-			sql.append(DateUtil.convertToString(date));
-			sql.append("';");
+                       sql.append("SELECT QTY FROM ");
+                       sql.append(TABLE_NAME);
+                       sql.append(" WHERE DATE='");
+                       sql.append(DateUtil.convertToString(date));
+                       sql.append("' AND ROOMTYPE='");
+                       sql.append(roomType);
+                       sql.append("';");
 
 			resultSet = statement.executeQuery(sql.toString());
 			if (resultSet.next() == true) {
-				availableQty = new AvailableQty();
-				availableQty.setDate(date);
-				availableQty.setQty(Integer.parseInt(resultSet.getString("qty")));
+                               availableQty = new AvailableQty();
+                               availableQty.setDate(date);
+                               availableQty.setRoomType(roomType);
+                               availableQty.setQty(Integer.parseInt(resultSet.getString("qty")));
 			}
 			else {
 				return null;
@@ -80,11 +83,13 @@ public class AvailableQtySqlDao implements AvailableQtyDao {
 			statement = connection.createStatement();
 			sql.append("UPDATE ");
 			sql.append(TABLE_NAME);
-			sql.append(" SET QTY='");
-			sql.append(availableQty.getQty());
-			sql.append("' WHERE DATE='");
-			sql.append(DateUtil.convertToString(availableQty.getDate()));
-			sql.append("';");
+                        sql.append(" SET QTY='");
+                        sql.append(availableQty.getQty());
+                        sql.append("' WHERE DATE='");
+                        sql.append(DateUtil.convertToString(availableQty.getDate()));
+                        sql.append("' AND ROOMTYPE='");
+                        sql.append(availableQty.getRoomType());
+                        sql.append("';");
 
 			resultSet = statement.executeQuery(sql.toString());
 		}
@@ -111,12 +116,14 @@ public class AvailableQtySqlDao implements AvailableQtyDao {
 			statement = connection.createStatement();
 			sql.append("INSERT INTO ");
 			sql.append(TABLE_NAME);
-			sql.append(" (date, qty) ");
-			sql.append("values ('");
-			sql.append(DateUtil.convertToString(availableQty.getDate()));
-			sql.append("', '");
-			sql.append(availableQty.getQty());
-			sql.append("');");
+                        sql.append(" (date, roomtype, qty) ");
+                        sql.append("values ('");
+                        sql.append(DateUtil.convertToString(availableQty.getDate()));
+                        sql.append("', '");
+                        sql.append(availableQty.getRoomType());
+                        sql.append("', '");
+                        sql.append(availableQty.getQty());
+                        sql.append("');");
 
 			resultSet = statement.executeQuery(sql.toString());
 		}
